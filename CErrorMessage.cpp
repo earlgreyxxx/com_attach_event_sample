@@ -50,7 +50,7 @@ UINT CErrorMessage::length(void)
 {
   UINT cchLength = 0;
 
-  StringCchLength(m_lpMsg,STRSAFE_MAX_CCH,&cchLength);
+  StringCchLength(m_lpMsg,STRSAFE_MAX_CCH,(size_t*)&cchLength);
 
   return cchLength;
 }
@@ -61,7 +61,7 @@ UINT CErrorMessage::GetMessage(LPTSTR lpBuf,UINT cbBufLen)
   UINT cbLength = 0;
   UINT cbCopySize = 0;
 
-  if(SUCCEEDED(StringCbLength(m_lpMsg,STRSAFE_MAX_CCH * sizeof(TCHAR),&cbLength)))
+  if(SUCCEEDED(StringCbLength(m_lpMsg,STRSAFE_MAX_CCH * sizeof(TCHAR),(size_t*)&cbLength)))
     {
       cbCopySize = cbLength + sizeof(TCHAR);
       if(lpBuf != NULL)
