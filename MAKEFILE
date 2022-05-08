@@ -1,0 +1,48 @@
+#
+# サンプル MAKEFILE
+#
+
+TARGETNAME=WebBrowser_TestSample
+
+OUTDIR=.\Release
+LINK32=link.exe
+CPP=cl.exe
+
+# この makefile はこれを作るためのものであることを示しています。
+ALL : $(OUTDIR)\$(TARGETNAME).exe 
+
+# 次は clean というカスタムのオプションを作っています (後述)。
+# nmake clean で -@erase の行が実行されます。
+
+CLEAN :
+	-@erase /Q $(OUTDIR)\* *.obj
+
+# 次の行は $(OUTDIR) すなわち .\chk というディレクトリが無かった場合、
+# そのディレクトリを作ります。
+
+$(OUTDIR) :
+	if not exist $(OUTDIR)/$(NULL) mkdir $(OUTDIR)
+
+# 以下はコンパイラオプションです。\ で改行しています。一行に書いてもかまいません。
+
+CPPFLAGS=/nologo /EHsc /c
+
+# 次はリンカオプションです。\ で改行しています。一行に書いてもかまいません。
+
+LINK32_FLAGS= /nologo /subsystem:console /out:"$(OUTDIR)\$(TARGETNAME).exe"
+	
+LINK32_LIBS=ole32.lib user32.lib comsuppw.lib
+LINK32_OBJS=CEventSink.obj CEventSinkBase.obj CErrorMessage.obj EntryPoint.obj
+
+
+$(OUTDIR)\$(TARGETNAME).exe : $(OUTDIR) $(LINK32_OBJS)
+	$(LINK32) $(LINK32_FLAGS) $(LINK32_LIBS) $(LINK32_OBJS)
+
+#CErrorMessage.cpp : CErrorMessage.h
+#CEventSink.cpp : common.h CEventSinkBase.h CEventSink.h
+#CEventSinkBase.cpp : common.h CEventSinkBase.h CEventSink.h
+#EntryPoint.cpp : common.h
+
+.cpp.obj:
+	$(CPP) $(CPPFLAGS) $<
+
